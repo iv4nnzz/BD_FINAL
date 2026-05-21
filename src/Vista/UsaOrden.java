@@ -56,6 +56,7 @@ public class UsaOrden extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButtonConsultaGlobal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -276,6 +277,14 @@ public class UsaOrden extends javax.swing.JFrame {
             }
         });
 
+        jButtonConsultaGlobal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jButtonConsultaGlobal.setText("Consulta global");
+        jButtonConsultaGlobal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonConsultaGlobalActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -290,8 +299,9 @@ public class UsaOrden extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                             .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jButton5))))))
+                                .addComponent(jButton5)
+                                .addComponent(jButton4)
+                                .addComponent(jButtonConsultaGlobal))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -302,11 +312,13 @@ public class UsaOrden extends javax.swing.JFrame {
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton4)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonConsultaGlobal))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -464,6 +476,56 @@ public class UsaOrden extends javax.swing.JFrame {
     this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void jButtonConsultaGlobalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultaGlobalActionPerformed
+        String sql = "SELECT o.numero, o.fecha_solicitud, o.tipo, o.observaciones, "
+        + "s.cedula, s.nombre_apellido, s.extension, s.cargo, "
+        + "d.centro_costo, d.nombre AS nombre_dependencia "
+        + "FROM ordenes o "
+        + "JOIN solicitantes s ON o.cedula_solicitante = s.cedula "
+        + "JOIN dependencias d ON s.centro_costo_dependencia = d.centro_costo "
+        + "ORDER BY o.numero";
+
+        StringBuilder sb = new StringBuilder("════════════════════════════════════════\n");
+        sb.append("        CONSULTA GLOBAL DE ÓRDENES\n");
+        sb.append("════════════════════════════════════════\n\n");
+
+        try (java.sql.Connection con = Datos.Conexion.getConexion();
+            java.sql.Statement st  = con.createStatement();
+            java.sql.ResultSet rs  = st.executeQuery(sql)) {
+
+            boolean hayDatos = false;
+            while (rs.next()) {
+                hayDatos = true;
+                sb.append(" ORDEN #").append(rs.getInt("numero")).append("\n")
+                .append("   Fecha:        ").append(rs.getDate("fecha_solicitud")).append("\n")
+                .append("   Tipo:         ").append(rs.getString("tipo")).append("\n")
+                .append("   Observaciones:").append(rs.getString("observaciones") != null
+                    ? rs.getString("observaciones") : "ninguna")
+                .append("\n\n")
+                .append(" SOLICITANTE\n")
+                .append("   Cédula:       ").append(rs.getInt("cedula")).append("\n")
+                .append("   Nombre:       ").append(rs.getString("nombre_apellido")).append("\n")
+                .append("   Extensión:    ").append(rs.getString("extension")).append("\n")
+                .append("   Cargo:        ").append(rs.getString("cargo")).append("\n\n")
+                .append(" DEPENDENCIA\n")
+                .append("   Centro Costo: ").append(rs.getString("centro_costo")).append("\n")
+                .append("   Nombre:       ").append(rs.getString("nombre_dependencia")).append("\n")
+                .append("────────────────────────────────────────\n\n");
+
+            }
+
+            if (!hayDatos) {
+                sb.append("No hay órdenes registradas aún.\n")
+                .append("Agrega al menos una orden para ver la consulta global.");
+            }
+
+        } catch (java.sql.SQLException e) {
+            sb.append("Error al consultar: ").append(e.getMessage());
+        }
+
+        jTextArea1.setText(sb.toString());
+    }//GEN-LAST:event_jButtonConsultaGlobalActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -508,6 +570,7 @@ public class UsaOrden extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButtonConsultaGlobal;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;

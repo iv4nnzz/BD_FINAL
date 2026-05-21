@@ -70,7 +70,6 @@ public class UsaSolicitante extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
-        jButtonConsultaGlobal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -388,14 +387,6 @@ public class UsaSolicitante extends javax.swing.JFrame {
             }
         });
 
-        jButtonConsultaGlobal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButtonConsultaGlobal.setText("Consulta global");
-        jButtonConsultaGlobal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonConsultaGlobalActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -404,13 +395,12 @@ public class UsaSolicitante extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(160, 160, 160)
-                        .addComponent(jButton9))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(jButton10)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonConsultaGlobal)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 125, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton10)
+                        .addGap(150, 150, 150)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -427,24 +417,22 @@ public class UsaSolicitante extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(11, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jButton9)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton10)
-                            .addComponent(jButtonConsultaGlobal)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1)))
-                .addContainerGap(11, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton10))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -686,57 +674,6 @@ public class UsaSolicitante extends javax.swing.JFrame {
     jTextArea1.setText(sb.toString());
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jButtonConsultaGlobalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConsultaGlobalActionPerformed
-            String sql = "SELECT o.numero, o.fecha_solicitud, o.tipo, o.observaciones, "
-               + "s.cedula, s.nombre_apellido, s.extension, s.cargo, "
-               + "d.centro_costo, d.nombre AS nombre_dependencia "
-               + "FROM ordenes o "
-               + "JOIN solicitantes s ON o.cedula_solicitante = s.cedula "
-               + "JOIN dependencias d ON s.centro_costo_dependencia = d.centro_costo "
-               + "ORDER BY o.numero";
-
-    StringBuilder sb = new StringBuilder("════════════════════════════════════════\n");
-    sb.append("        CONSULTA GLOBAL DE ÓRDENES\n");
-    sb.append("════════════════════════════════════════\n\n");
-
-    try (java.sql.Connection con = Datos.Conexion.getConexion();
-         java.sql.Statement st  = con.createStatement();
-         java.sql.ResultSet rs  = st.executeQuery(sql)) {
-
-        boolean hayDatos = false;
-        while (rs.next()) {
-            hayDatos = true;
-            sb.append(" ORDEN #").append(rs.getInt("numero")).append("\n")
-              .append("   Fecha:        ").append(rs.getDate("fecha_solicitud")).append("\n")
-              .append("   Tipo:         ").append(rs.getString("tipo")).append("\n")
-              .append("   Observaciones:").append(rs.getString("observaciones") != null 
-                                                  ? rs.getString("observaciones") : "ninguna")
-              .append("\n\n")
-              .append(" SOLICITANTE\n")
-              .append("   Cédula:       ").append(rs.getInt("cedula")).append("\n")
-              .append("   Nombre:       ").append(rs.getString("nombre_apellido")).append("\n")
-              .append("   Extensión:    ").append(rs.getString("extension")).append("\n")
-              .append("   Cargo:        ").append(rs.getString("cargo")).append("\n\n")
-              .append(" DEPENDENCIA\n")
-              .append("   Centro Costo: ").append(rs.getString("centro_costo")).append("\n")
-              .append("   Nombre:       ").append(rs.getString("nombre_dependencia")).append("\n")
-              .append("────────────────────────────────────────\n\n");
-
-        }
-
-        if (!hayDatos) {
-            sb.append("No hay órdenes registradas aún.\n")
-              .append("Agrega al menos una orden para ver la consulta global.");
-        }
-
-    } catch (java.sql.SQLException e) {
-        sb.append("Error al consultar: ").append(e.getMessage());
-    }
-
-    jTextArea1.setText(sb.toString());
-
-    }//GEN-LAST:event_jButtonConsultaGlobalActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -783,7 +720,6 @@ public class UsaSolicitante extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JButton jButtonConsultaGlobal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
