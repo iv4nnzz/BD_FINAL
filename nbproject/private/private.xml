@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/BaseDatos/BaseDatos.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Modelo/Dependencia.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Modelo/DescripcionServicio.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Modelo/EspecificacionPapel.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Modelo/Liquidacion.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Vista/UsaSolicitante.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Vista/UsaOrden.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Modelo/Orden.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Modelo/Solicitante.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Modelo/LiquidacionPapelReproduccion.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Modelo/LiquidacionServicioAdicional.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Modelo/Trabajo.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Modelo/Solicitud.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Datos/Conexion.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Datos/Dependenciadao.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Datos/Solicitantedao.java</file>
+            <file>file:/C:/Users/9spot/Desktop/Gestion_servicios_GUI/Gestion_servicios/src/Datos/Ordendao.java</file>
+        </group>
+    </open-files>
+</project-private>
