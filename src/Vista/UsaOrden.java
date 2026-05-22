@@ -330,13 +330,15 @@ public class UsaOrden extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-    String sql = "SELECT o.numero, o.fecha_solicitud, o.tipo, o.observaciones, "
-               + "s.nombre_apellido, s.cedula "
+    String sql = "SELECT o.numero, o.fecha_solicitud, o.tipo, "
+               + "s.nombre_apellido, s.cargo, "
+               + "d.nombre AS dependencia "
                + "FROM ordenes o "
                + "JOIN solicitantes s ON o.cedula_solicitante = s.cedula "
+               + "JOIN dependencias d ON s.centro_costo_dependencia = d.centro_costo "
                + "ORDER BY o.numero";
 
-    StringBuilder sb = new StringBuilder("LISTADO DE ÓRDENES \n\n");
+    StringBuilder sb = new StringBuilder("=== TODAS LAS ÓRDENES ===\n\n");
 
     try (java.sql.Connection con = Datos.Conexion.getConexion();
          java.sql.Statement st  = con.createStatement();
@@ -346,19 +348,21 @@ public class UsaOrden extends javax.swing.JFrame {
         while (rs.next()) {
             hayDatos = true;
             sb.append("Orden #").append(rs.getInt("numero"))
-              .append("  |  ").append(rs.getDate("fecha_solicitud"))
+              .append("  |  Fecha: ").append(rs.getDate("fecha_solicitud"))
               .append("  |  Tipo: ").append(rs.getString("tipo"))
               .append("  |  Solicitante: ").append(rs.getString("nombre_apellido"))
-              .append(" (CC: ").append(rs.getInt("cedula")).append(")")
+              .append("  |  Cargo: ").append(rs.getString("cargo"))
+              .append("  |  Dependencia: ").append(rs.getString("dependencia"))
               .append("\n");
         }
-        if (!hayDatos) sb.append("No hay órdenes registradas aún.");
+        if (!hayDatos) sb.append("No hay órdenes registradas.");
 
     } catch (java.sql.SQLException e) {
-        sb.append("Error al consultar: ").append(e.getMessage());
+        sb.append("Error: ").append(e.getMessage());
     }
 
     jTextArea1.setText(sb.toString());
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -422,22 +426,49 @@ public class UsaOrden extends javax.swing.JFrame {
             return;
         }
         int numero = Integer.parseInt(jTextField4.getText().trim());
-        Datos.Ordendao dao = new Datos.Ordendao();
-        Modelo.Orden o = dao.buscar(numero);
 
-        if (o != null) {
-            jTextArea1.setText("ORDEN ENCONTRADA \n"
-                + "Número:       " + o.getNumero() + "\n"
-                + "Fecha:        " + o.getFechaSolicitud() + "\n"
-                + "Tipo:         " + o.getTipoCedula() + "\n"
-                + "Solicitante:  " + o.getCedulaSolicitante() + "\n"
-                + "Observaciones:" + o.getObservaciones());
-        } else {
-            jTextArea1.setText("No se encontró ninguna orden con número: " + numero);
+        String sql = "SELECT o.numero, o.fecha_solicitud, o.tipo, o.observaciones, "
+                   + "s.cedula, s.nombre_apellido, s.cargo, s.extension, "
+                   + "d.centro_costo, d.nombre AS dependencia "
+                   + "FROM ordenes o "
+                   + "JOIN solicitantes s ON o.cedula_solicitante = s.cedula "
+                   + "JOIN dependencias d ON s.centro_costo_dependencia = d.centro_costo "
+                   + "WHERE o.numero = ?";
+
+        try (java.sql.Connection con = Datos.Conexion.getConexion();
+             java.sql.PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, numero);
+            java.sql.ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                jTextArea1.setText(
+                      "=== ORDEN ENCONTRADA ===\n"
+                    + "Número:       " + rs.getInt("numero") + "\n"
+                    + "Fecha:        " + rs.getDate("fecha_solicitud") + "\n"
+                    + "Tipo:         " + rs.getString("tipo") + "\n"
+                    + "Observaciones:" + (rs.getString("observaciones") != null 
+                                         ? rs.getString("observaciones") : "ninguna") + "\n\n"
+                    + "--- SOLICITANTE ---\n"
+                    + "Cédula:       " + rs.getInt("cedula") + "\n"
+                    + "Nombre:       " + rs.getString("nombre_apellido") + "\n"
+                    + "Cargo:        " + rs.getString("cargo") + "\n"
+                    + "Extensión:    " + rs.getString("extension") + "\n\n"
+                    + "--- DEPENDENCIA ---\n"
+                    + "Centro Costo: " + rs.getString("centro_costo") + "\n"
+                    + "Nombre:       " + rs.getString("dependencia")
+                );
+            } else {
+                jTextArea1.setText("No se encontró ninguna orden con número: " + numero);
+            }
         }
+
     } catch (NumberFormatException e) {
         javax.swing.JOptionPane.showMessageDialog(this, "El número de orden debe ser un entero.");
+    } catch (java.sql.SQLException e) {
+        jTextArea1.setText("Error al consultar: " + e.getMessage());
     }
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
